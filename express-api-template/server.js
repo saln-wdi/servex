@@ -7,7 +7,9 @@ const cors = require('cors')
 // require route files
 const exampleRoutes = require('./app/routes/example_routes')
 const userRoutes = require('./app/routes/user_routes')
-
+const categroyRoutes = require('./app/routes/categroy_routes')
+const serviceRoutes = require('./app/routes/service_routes')
+const customerRoutes = require('./app/routes/customer_routes')
 // require error handling middleware
 const errorHandler = require('./lib/error_handler')
 
@@ -26,7 +28,7 @@ const tokenOrBearer = require('./lib/token_or_bearer')
 
 // Define Ports
 const reactPort = 7165
-const expressPort = 3000
+const expressPort = 8000
 
 // establish database connection
 mongoose.Promise = global.Promise
@@ -64,8 +66,10 @@ app.use(requestLogger)
 
 // register route files
 app.use(exampleRoutes)
-app.use(userRoutes)
-
+app.use('/users/', userRoutes)
+app.use('/users/categroies/', categroyRoutes)
+app.use('/users/categroies', serviceRoutes)
+app.use('/customers', customerRoutes)
 // register error handling middleware
 // note that this comes after the route middlewares, because it needs to be
 // passed any error messages from them
