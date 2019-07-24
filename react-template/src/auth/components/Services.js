@@ -1,25 +1,17 @@
 import React,{Component} from 'react'
-import {services, request} from '../api'
+import {services, addServices, destroyService} from '../api'
+import { withRouter, Link } from 'react-router-dom'
 class Services extends Component {
     state = {
         services: [],
-        formDate: {
-            request: {
-                date: ''
-            },
-            customer: {
-                name: '',
-                email: '',
-                phone: '',
-                address: {
-                    city: '',
-                    district: ''
-                }
-            }
+        service: {
+            name: '',
+            description: ''
         }
     }
     componentDidMount = () => {
-        const id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+        const id = this.props.match.params.id
+    
         services(this.props.user, id)
         .then(
             response => this.setState({
@@ -31,74 +23,59 @@ class Services extends Component {
         .catch(error => console.error(error))
     }
     handleChange = event => {
-        const copyFormDate = Object.assign(this.state.formDate);
-        const name = event.target.name;
-        const value = event.target.value;
-        if(name === 'date'){
-            copyFormDate.request.date = value
-            this.setState({
-                formDate: copyFormDate
-            })
-        }
-        else if(name.includes('address')){
-            copyFormDate.customer["address"][name.substring(8)] = value;
-            this.setState({
-                formDate: copyFormDate
-            })
-        }
-        else {
-            copyFormDate.customer[name] = value
-            this.setState({
-                formDate: copyFormDate
-            })
-        }
+        const copyService = Object.assign(this.state.service);
+        copyService[event.target.name] = event.target.value;
+        this.setState({
+            service: copyService
+        })
 
     }
-    onSubmit = (event, sid) => {
-        const cid = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+    onSubmit = event => {
         event.preventDefault()
-        request(cid, sid, this.state.formDate)
-        .then(
-            response => {
-                console.log(response)
-                this.setState({
-                    services: [],
-                    formDate: {
-                        request: {
-                            date: ''
-                        },
-                        customer: {
-                            name: '',
-                            email: '',
-                            phone: '',
-                            address: {
-                                city: '',
-                                district: ''
-                            }
-                        }
-                    }
-                })
-                this.componentDidMount()
+        const id = this.props.match.params.id
+        addServices(this.props.user, id, this.state.service)
+        .then(service => {
+        this.setState({
+            service: {
+                name: '',
+                description: ''
             }
-        )
-        .catch(error => console.error(error))
+        })
+        this.componentDidMount();
+        })
+        
         
     }
+    destroy = sid => {
+        console.log(sid)
+        console.log(this.props.match.params.id)
+        destroyService(this.props.user, this.props.match.params.id, sid)
+        .then(
+            deleteProcessing => this.componentDidMount()
+        )
+        .catch(error => console.error(error))
+    }
     render(){
-        const formDate = this.state.formDate;
-        const {request, customer} = formDate;
-        const {date} = request.date
-        const {name, email, phone, address} = customer
-        const {city, district} = address
+        const {name, description} = this.state.service
         return (
             <div>
                 {this.state.services.map(service => 
                     <div key={service._id}>
                         <h3>{service.name}</h3>
                         <p>{service.description}</p>
-                        <details>
-                            <summary>Request</summary>
-                            <form onSubmit={event => this.onSubmit(event, service._id)}>
+                        <Link to={`/dashboard/${this.props.match.params.id}/edit/services/${service._id}`} >
+                            Edit
+                        </Link>
+                        &nbsp;
+                        <Link to={`/dashboard/${this.props.match.params.id}`} onClick={() => this.destroy(service._id)}>
+                        Destroy
+                        </Link> 
+                        <hr/>
+                    </div>
+                )}
+                <details>
+                        <summary>Add Service</summary>
+                            <form onSubmit={this.onSubmit}>
                                 <label htmlFor="name">Name</label>
                                 <input
                                 required
@@ -107,56 +84,20 @@ class Services extends Component {
                                 type="text"
                                 onChange={this.handleChange}
                                 />
-                                <label htmlFor="email">Email</label>
-                                <input
+                                <label htmlFor="description">Description</label>
+                                <textarea rows="4" cols="50"
                                 required
-                                name="email"
-                                value={email}
-                                type="email"
+                                name="description"
+                                value={description}
                                 onChange={this.handleChange}
                                 />
-                                <label htmlFor="date">Date</label>
-                                <input
-                                required
-                                name="date"
-                                value={date}
-                                type="date"
-                                onChange={this.handleChange}
-                                />
-                                <label htmlFor="phone">Phone</label>
-                                <input
-                                required
-                                name="phone"
-                                value={phone}
-                                type="text"
-                                onChange={this.handleChange}
-                                />
-                                <label htmlFor="address">Address</label>
-                                <label>City</label>
-                                <input
-                                required
-                                name="address city"
-                                value={city}
-                                type="text"
-                                onChange={this.handleChange}
-                                />
-                                 <label>District</label>
-                                <input
-                                required
-                                name="address district"
-                                value={district}
-                                type="text"
-                                onChange={this.handleChange}
-                                />
-                                <input type="submit" value="Request" />
+                               
+                                <input type="submit" value="Add Service" />
                             </form>
                         </details>
-                        <hr/>
-                    </div>
-                )}
             </div>
         )
     }
 }
 
-export default Services
+export default withRouter(Services)

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import {categories, categoriesPost} from '../api'
-import { Link } from 'react-router-dom'
+import {categories, categoriesPost, destroyCategroy} from '../api'
+import { Link, withRouter } from 'react-router-dom'
 class Dashboard extends Component {
     state = {
         categories: [],
@@ -36,14 +36,33 @@ class Dashboard extends Component {
         )
         .catch(error => console.error(error))
     }
+    destroy = (id) => {
+        destroyCategroy(this.props.user, id)
+        .then(
+            deleteDone => {
+                console.log(deleteDone)
+                this.componentDidMount();
+            }
+        )
+        .catch(error => console.error(error))
+    }
     render() {
         return(
             <div>
                 {this.state.categories.map(category =>
-                <Link to={`/dashboard/${category._id}`} key={category._id}>
-                <h1 key={category._id}>{category.name}
-                </h1>
-                </Link> 
+                <div key={category._id}>
+                <Link to={`/dashboard/${category._id}`}>
+                <h1>{category.name}</h1>
+                </Link>
+                &nbsp; 
+                <Link to={`/dashboard/edit/${category._id}`}>
+                    Edit
+                </Link>
+                &nbsp; 
+                <Link to={`/dashboard`} onClick={() => this.destroy(category._id)}>
+                    Destroy
+                </Link>  
+                </div>
                 )}
                 <details>
                 <summary>Add Category</summary>
@@ -65,4 +84,4 @@ class Dashboard extends Component {
     }
 }
 
-export default Dashboard;
+export default withRouter(Dashboard); 

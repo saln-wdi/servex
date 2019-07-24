@@ -48,13 +48,53 @@ const show = (req, res, next) => {}
 
 
 //////////////destroy/////////////////
-const destroy = (req, res, next) => {}
+const destroy = (req, res, next) => {
+    User.find({_id: req.user.id})
+    .then(handle404)
+    .then(
+        Categroy.update({_id: req.params.cid}, {
+            $pull: {services: req.params.sid}
+        })
+        .then(
+            updateProcessing => {
+                Service.remove({_id: req.params.sid})
+                .then(
+                    updateProcess => res.status(201).json({updateProcess})
+                )
+                .catch(next)
+            }
+        )
+        .catch(next)
+    )
+    .catch(next)
+}
 
-
+router.delete('/:cid/services/:sid', requireToken, destroy);
 //////////////update/////////////////
-const update = (req, res, next) => {}
+const update = (req, res, next) => {
+    User.find({_id: req.user.id})
+    .then(handle404)
+    .then(
+        user => {
+            Categroy.find({_id: req.params.cid})
+            .then(handle404)
+            .then(
+                category => {
+                    Service.update({_id: req.params.sid}, {$set: 
+                        {name: req.body.service.name, description: req.body.service.description}})
+                        .then(
+                            updateProcessing => res.status(201).json({user, category, updateProcessing})
+                        )
+                        .catch(next)
+                }
+            )
+            .catch(next)
+        }
+    )
+    .catch(next)
+}
 
-
+router.patch('/:cid/services/:sid', requireToken, update);
 //////////////create/////////////////
 const create = (req, res, next) => {
     const id = req.params.id;

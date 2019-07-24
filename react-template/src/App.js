@@ -10,7 +10,9 @@ import SignOut from './auth/components/SignOut'
 import ChangePassword from './auth/components/ChangePassword'
 import Dashboard from './auth/components/Dashboard'
 import Services from './auth/components/Services'
+import Categroy from './auth/components/Categroy'
 import Alert from 'react-bootstrap/Alert'
+import Service from './auth/components/Service'
 
 class App extends Component {
   constructor () {
@@ -61,6 +63,12 @@ class App extends Component {
           )} />
           <AuthenticatedRoute user={user} exact path='/dashboard/:id' render={() => (
             <Services  user={user} />
+          )} />
+           <AuthenticatedRoute user={user} exact path='/dashboard/edit/:id' render={() => (
+            <Categroy  user={user}/>
+          )} />
+          <AuthenticatedRoute user={user} exact path='/dashboard/:cid/edit/services/:sid' render={() => (
+            <Service  user={user} />
           )} />
         </main>
       </React.Fragment>

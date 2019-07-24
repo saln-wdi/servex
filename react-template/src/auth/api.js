@@ -104,9 +104,74 @@ export const request = (cid, sid, request) => {
   return axios({
     method: 'POST',
     url: `${apiUrl}/customers/${cid}/${sid}/servex/`,
-    data: request
+    data: request,
+    
+})}
+
+export const addServices = (user, id, service) => {
+  return axios({
+    method: 'POST',
+    url: `${apiUrl}/users/categroies/${id}/services`,
+    data: {
+      service: service
+    },
+    headers: {
+      'Authorization': `Bearer ${user.token}` // FOR EXPRESS
+      // 'Authorization': `Token token=${user.token}` // FOR RAILS
+    },
   
 })}
 
+export const updateCategroy = (user, id, categroy) => {
+  return axios({
+    method: 'patch',
+    url: `${apiUrl}/users/categroies/${id}`,
+    data: {
+      categroy: categroy
+    },
+    headers: {
+      'Authorization': `Bearer ${user.token}` // FOR EXPRESS
+      // 'Authorization': `Token token=${user.token}` // FOR RAILS
+    },
+  
+})}
+
+export const destroyCategroy = (user, id) => {
+  return axios({
+    method: 'delete',
+    url: `${apiUrl}/users/categroies/${id}`,
+    headers: {
+      'Authorization': `Bearer ${user.token}` // FOR EXPRESS
+      // 'Authorization': `Token token=${user.token}` // FOR RAILS
+    },
+  
+})}
+
+
+export const updateService = (user, cid, sid, service) => {
+  return axios({
+    method: 'patch',
+    url: `${apiUrl}/users/categroies/${cid}/services/${sid}`,
+    data: {
+      service: service
+    },
+    headers: {
+      'Authorization': `Bearer ${user.token}` // FOR EXPRESS
+      // 'Authorization': `Token token=${user.token}` // FOR RAILS
+    },
+  
+})}
+
+export const destroyService = (user, cid, sid) => {
+  return axios({
+    method: 'delete',
+    url: `${apiUrl}/users/categroies/${cid}/services/${sid}`,
+    headers: {
+      'Authorization': `Bearer ${user.token}` // FOR EXPRESS
+      // 'Authorization': `Token token=${user.token}` // FOR RAILS
+    },
+  
+})}
+/// /users/categroies/:id/services
 
 ///users/categroies/:id/services

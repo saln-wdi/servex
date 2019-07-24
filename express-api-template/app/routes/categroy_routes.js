@@ -11,7 +11,7 @@ const requireToken = passport.authenticate('bearer', { session: false });
 //////////////models////////////////
 const User = require('../models/user');
 const Categroy = require('../models/categroy');
-
+const Service = require('../models/service')
 
 ////////////////////////////////////CRUD////////////////////////////////////////////////
 
@@ -40,11 +40,50 @@ const show = (req, res, next) => {}
 
 
 //////////////destroy/////////////////
-const destroy = (req, res, next) => {}
-
+const destroy = (req, res, next) => {
+    User.update({_id: req.user.id}, {
+        $pull: {categories: req.params.id}
+    })
+    .then(
+        updateProcessing => {
+            Service.deleteMany({category: req.params.id})
+            .then(
+                deleteProcessing => {
+                    Categroy.remove({_id: req.params.id})
+                    .then(
+                        removeProcessing => res.status(200).json({
+                            updateProcessing, deleteProcessing, removeProcessing
+                        })
+                    )
+                    .catch(next)
+                }
+            )
+            .catch(next)
+        }
+    )
+    .catch(next)
+}
+router.delete('/:id', requireToken, destroy);
 
 //////////////update/////////////////
-const update = (req, res, next) => {}
+const update = (req, res, next) => {
+    User.findById(req.user.id)
+    .then(handle404)
+    .then(
+        user => {
+            Categroy.update({_id: req.params.id, user: req.user.id}, {
+                $set: {name: req.body.categroy.name}
+            })
+            .then(
+                updateProcessing => res.status(201).json({updateProcessing})
+            )
+            .catch(next)
+        }
+    )
+    .catch(next)
+}
+
+router.patch('/:id', requireToken, update);
 
 
 //////////////create/////////////////
