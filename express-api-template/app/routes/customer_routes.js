@@ -13,6 +13,7 @@ const Request_ = require('../models/request_service');
 const Customer = require('../models/customer')
 const Categroy = require('../models/categroy')
 const Service = require('../models/service')
+const User = require('../models/user')
 
 ////////////////////////////////////CRUD////////////////////////////////////////////////
 
@@ -57,7 +58,21 @@ const create = (req, res, next) => {
          newCustomer.save()
          .then(customer => {
              Request_.update({_id: request._id}, {$set :{owner: customer._id}})
-             .then(updateProcessing => res.status(201).json({request, customer, updateProcessing}))
+             .then(updateProcessing => {
+                 Categroy.find({_id: req.params.cid})
+                 .then(handle404)
+                 .then(category => {
+                     User.update({_id: category[0].user}, {$push: {servicesLog: request._id}})
+                     .then(updateProcess => res.status(201).json(
+                         {request, 
+                            category,
+                            customer, 
+                            updateProcessing, 
+                            updateProcess}))
+                     .catch(next)
+                 })
+                 .catch(next)
+             })
              .catch(next)
          })
          .catch(next)

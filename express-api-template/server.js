@@ -68,7 +68,7 @@ app.use(requestLogger)
 app.use(exampleRoutes)
 app.use('/users/', userRoutes)
 app.use('/users/categroies/', categroyRoutes)
-app.use('/users/categroies', serviceRoutes)
+app.use('/users/categroies/', serviceRoutes)
 app.use('/customers', customerRoutes)
 // register error handling middleware
 // note that this comes after the route middlewares, because it needs to be

@@ -11,14 +11,38 @@ const requireToken = passport.authenticate('bearer', { session: false });
 //////////////models////////////////
 const Categroy = require('../models/categroy');
 const Service = require('../models/service')
-
+const User = require('../models/user')
 
 ////////////////////////////////////CRUD////////////////////////////////////////////////
 
 //////////////index/////////////////
-const index = (req, res, next) => {}
+const index = (req, res, next) => {
+    console.log('dsfdssdfafdaskdklsfalafsdl')
+    User.find({_id: req.user.id})
+    .then(handle404)
+    .then(
+        user => {
+            Categroy.find({_id: req.params.id})
+            .then(handle404)
+            .then(
+                category => {
+                    Service.find({category: req.params.id})
+                    .then(handle404)
+                    .then(
+                        services => {
+                            res.status(200).json({services})
+                        }
+                    )
+                    .catch(next)
+                }
+            )
+            .catch(next)
+        }
+    )
+    .catch(next)
+}
 
-
+router.get('/:id/services', requireToken, index);
 //////////////show/////////////////
 const show = (req, res, next) => {}
 

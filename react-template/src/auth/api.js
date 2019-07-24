@@ -4,20 +4,24 @@ import axios from 'axios'
 export const signUp = credentials => {
   return axios({
     method: 'POST',
-    url: apiUrl + '/sign-up',
+    url: apiUrl + '/users/sign-up',
     data: {
       credentials: {
+        name: credentials.name,
+        phone: credentials.phone,
+        address: credentials.address,
         email: credentials.email,
         password: credentials.password,
         password_confirmation: credentials.passwordConfirmation
       }
     }
   })
+  
 }
 
 export const signIn = credentials => {
   return axios({
-    url: apiUrl + '/sign-in',
+    url: apiUrl + '/users/sign-in',
     method: 'POST',
     data: {
       credentials: {
@@ -55,3 +59,54 @@ export const changePassword = (passwords, user) => {
     }
   })
 }
+
+
+export const categories = user => {
+  return axios({
+    method: 'get',
+    url: apiUrl + '/users/categroies',
+    headers: {
+      'Authorization': `Bearer ${user.token}` // FOR EXPRESS
+      // 'Authorization': `Token token=${user.token}` // FOR RAILS
+    }
+  })
+  
+}
+
+export const categoriesPost = (user, name) => {
+  return axios({
+    method: 'POST',
+    url: apiUrl + '/users/categroies',
+    headers: {
+      'Authorization': `Bearer ${user.token}` // FOR EXPRESS
+      // 'Authorization': `Token token=${user.token}` // FOR RAILS
+    },
+    data: {
+      categroy: {
+        name: name
+      }
+  }
+})}
+
+export const services = (user, id) => {
+  return axios({
+    method: 'get',
+    url: `${apiUrl}/users/categroies/${id}/services/`,
+    headers: {
+      'Authorization': `Bearer ${user.token}` // FOR EXPRESS
+      // 'Authorization': `Token token=${user.token}` // FOR RAILS
+    },
+  
+})}
+
+
+export const request = (cid, sid, request) => {
+  return axios({
+    method: 'POST',
+    url: `${apiUrl}/customers/${cid}/${sid}/servex/`,
+    data: request
+  
+})}
+
+
+///users/categroies/:id/services
