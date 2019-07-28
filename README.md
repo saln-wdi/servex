@@ -37,4 +37,4 @@ User can provide a service.
 
 
 ## Developers
-Nashaat, Salman, and Salman
+Nashaat, Salman, and Omar
