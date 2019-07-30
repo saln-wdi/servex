@@ -1,6 +1,6 @@
 {
   "name": "react-auth-template",
-  "homepage": "https://saln-wdi.github.io/servex",
+  "homepage": "http://saln-wdi.github.io/servex",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
