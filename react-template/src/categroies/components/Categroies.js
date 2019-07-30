@@ -70,15 +70,15 @@ class Categroies extends Component
             <div>
                 {this.state.categories.map(category =>
                     <div key={category._id}>
-                    <Link to={`/dashboard/${category._id}`}>
+                    <Link to={`/categroies/${category._id}`}>
                     <h1>{category.name}</h1>
                     </Link>
                     &nbsp; 
-                    <Link to={`/dashboard/edit/${category._id}`}>
+                    <Link to={`/categroies/edit/${category._id}`}>
                         Edit
                     </Link>
                     &nbsp; 
-                    <Link to={`/dashboard`} onClick={() => this.destroy(category._id)}>
+                    <Link to={`/categroies`} onClick={() => this.destroy(category._id)}>
                         Destroy
                     </Link>  
                     </div>

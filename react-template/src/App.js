@@ -8,11 +8,17 @@ import SignUp from './auth/components/SignUp'
 import SignIn from './auth/components/SignIn'
 import SignOut from './auth/components/SignOut'
 import ChangePassword from './auth/components/ChangePassword'
-import Dashboard from './categroies/components/Categroies'
+import Dashboard from './dashboard/components/Dashboard'
+import Categroies from './categroies/components/Categroies'
 import EditCategroy from './categroies/components/EditCategroy'
 import Alert from 'react-bootstrap/Alert'
 import Services from './services/components/Services'
 import EditService from './services/components/EditService'
+import Requests from './requests/components/Requests'
+import Request from './requests/components/Request'
+import Owners from './requests/components/Owners'
+import EditRequest from './requests/components/EditRequest'
+
 
 class App extends Component {
   constructor () {
@@ -61,16 +67,33 @@ class App extends Component {
           <AuthenticatedRoute user={user} exact path='/dashboard' render={() => (
             <Dashboard  user={user} />
           )} />
-          <AuthenticatedRoute user={user} exact path='/dashboard/:id' render={() => (
+          <AuthenticatedRoute user={user} exact path='/categroies' render={() => (
+            <Categroies  user={user} />
+          )} />
+          <AuthenticatedRoute user={user} exact path='/categroies/:id' render={() => (
             <Services  user={user} />
           )} />
-           <AuthenticatedRoute user={user} exact path='/dashboard/edit/:id' render={() => (
+           <AuthenticatedRoute user={user} exact path='/categroies/edit/:id' render={() => (
             <EditCategroy  user={user}/>
           )} />
-          <AuthenticatedRoute user={user} exact path='/dashboard/:cid/edit/services/:sid' render={() => (
+          <AuthenticatedRoute user={user} exact path='/categroies/:cid/edit/services/:sid' render={() => (
             <EditService  user={user} />
           )} />
+          <AuthenticatedRoute user={user} exact path='/requests/services' render={() => (
+            <Requests  user={user} />
+          )} />
+          <AuthenticatedRoute user={user} exact path='/requests/services/:id' render={() => (
+            <Request  user={user} />
+          )} />
+          {/* /requests/services/${request.id} */}
+          <AuthenticatedRoute user={user} exact path='/requests/services/:sid/owners/:oid' render={() => (
+            <Owners  user={user} />
+          )} />
+          <AuthenticatedRoute user={user} exact path='/requests/services/:sid/owners/:oid/:rid' render={() => (
+            <EditRequest  user={user} />
+          )} />
         </main>
+        
       </React.Fragment>
     )
   }

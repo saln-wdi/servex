@@ -62,11 +62,11 @@ class Services extends Component {
                     <div key={service._id}>
                         <h3>{service.name}</h3>
                         <p>{service.description}</p>
-                        <Link to={`/dashboard/${this.props.match.params.id}/edit/services/${service._id}`} >
+                        <Link to={`/categroies/${this.props.match.params.id}/edit/services/${service._id}`} >
                             Edit
                         </Link>
                         &nbsp;
-                        <Link to={`/dashboard/${this.props.match.params.id}`} onClick={() => this.destroy(service._id)}>
+                        <Link to={`/categroies/${this.props.match.params.id}`} onClick={() => this.destroy(service._id)}>
                         Destroy
                         </Link> 
                         <hr/>

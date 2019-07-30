@@ -5,7 +5,7 @@ const passport = require('passport');
 const requireToken = passport.authenticate('bearer', { session: false });
 const {index, show, destroy, update, create} = require('./controller')
  
-
+ 
 
 
 ////////////////////////////////////CRUD////////////////////////////////////////////////

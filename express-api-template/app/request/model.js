@@ -21,6 +21,11 @@ const requestSchema = new mongoose.Schema(
             type: Date,
             required: true
         },
+        description: 
+        {
+            type: String,
+            required: true
+        },
         owner: 
         {
             type: mongoose.Schema.Types.ObjectId, 

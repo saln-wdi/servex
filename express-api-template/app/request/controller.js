@@ -34,7 +34,6 @@ const show = (req, res, next) => {
     Request_.find({service: req.params.id})
     .then(handle404)
     .then(
-        
         requests => {
             const filteringRequest = requests.map(request=> request.owner)
             Customer.find({_id: {$in: filteringRequest}})
@@ -49,26 +48,53 @@ const show = (req, res, next) => {
                 
             )
             .catch(next)
-        }
+       }
     )
     .catch(next)
 }
 
 
 const showing = (req, res, next) => {
-    Customer.findById(req.params.cid)
+    Request_.find({owner: req.params.cid, service: req.params.sid})
+    .then(handle404)
+    .then(requests => {
+        const filteringRequests = requests.map(request => {
+            return {date: request.date.toDateString(), description: request.description, id: request.id, status: request.status}
+        })
+        res.status(200).json({requests: filteringRequests})
+    }
+        )
+    .catch(next)
+}
+
+const update = (req, res, next) => {
+    Request_.update({_id: req.params.rid}, {$set: {status: req.body.status}})
+    .then(
+        request => {
+            res.status(200).json({request})
+        }
+    )
+    .catch(next)
+}
+
+const find = (req, res, next) => {
+    Request_.findById(req.params.rid)
     .then(handle404)
     .then(
-        customer => {
-            // const filteringCustomer = customer.map(customer=>{
-            //     return {customer: customer.name, email: customer.email, phone: customer.phone, address: customer.address, id: customer._id, }
-            // })
-            res.status(200).json({})
+        request => {
+            Customer.findById(req.params.cid)
+            .then(handle404)
+            .then(
+                customer => {
+                    const filteringCustomer = {name: customer.name, phone: customer.phone, address: customer.address, email: customer.email, }
+                    res.json({customer: filteringCustomer, date: request.date.toDateString(), description: request.description, status: request.status})
+                }
+            )
+            .catch(next)
         }
     )
     .catch(next)
 }
 
 
-
-module.exports = {index, show, showing}
+module.exports = {index, show, showing, update, find}

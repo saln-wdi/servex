@@ -47,4 +47,4 @@ export const indexing = (user, uid, cid, sid, request) => {
         'Authorization': `Bearer ${user.token}` 
       }
     })
-  }
+}

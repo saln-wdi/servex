@@ -5,7 +5,7 @@ const handle404 = customErrors.handle404;
 const Category = require('../category/model');
 const Service = require('./model')
 const User = require('../models/user')
-
+ 
 
 
 const index = (req, res, next) => {

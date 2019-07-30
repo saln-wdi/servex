@@ -6,12 +6,15 @@ import {indexing} from '../api'
 class Request extends Component {
     state = 
     {
-        date: ""
+        date: "",
+        description: ""
     }
 
-    handleChange = event => this.setState({
-        date: event.target.value
+    handleChange = event => {
+        this.setState({
+        [event.target.name]: event.target.value
     })
+    }
 
     handleSubmit = event => {
         event.preventDefault()
@@ -20,7 +23,8 @@ class Request extends Component {
         .then(
             res => {
                 this.setState({
-                    date: ""
+                    date: "",
+                    description: ""
                 })
                 this.props.history.goBack()
             }
@@ -33,8 +37,11 @@ class Request extends Component {
             <div>
                <form onSubmit={this.handleSubmit}>
                    <label htmlFor="date">Date</label>
-                   <input type="date" 
+                   <input type="date" name="date"
                    value={this.state.date} onChange={this.handleChange}/>
+                   <label htmlFor="description">Description</label>
+                   <textarea name="description"
+                   value={this.state.description} onChange={this.handleChange}/>
                    <input type="submit" value="Request" />
                </form>
             </div>

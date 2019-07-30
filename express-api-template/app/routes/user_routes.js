@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require('express') 
 // jsonwebtoken docs: https://github.com/auth0/node-jsonwebtoken
 const crypto = require('crypto')
 // Passport docs: http://www.passportjs.org/docs/

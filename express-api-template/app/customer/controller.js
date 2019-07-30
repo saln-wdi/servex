@@ -155,8 +155,45 @@ const indexing = (req, res, next) => {
       .catch(next)
     }
   )
-  .catch()
+  .catch(next)
+}
+
+const findAll = (req, res, next) => {
+  Request_.find({owner: req.user.id})
+  .then(handle404)
+  .then(
+    requests => {
+      const filteringRequests = requests.map(request => request.service)
+      Service.find({_id: {$in: filteringRequests}})
+      .then(handle404)
+      .then(
+        services => {
+          const filteringServices = services.map(service=> {
+            return {name: service.name, description: service.description, id: service._id}
+          })
+          res.status(200).json({services: filteringServices})
+        }
+      )
+      .catch(next)
+      
+    }
+  )
+  .catch(next)
 }
 
 
-module.exports = {create, enter, update, destroy, index, indexing, show, showing}
+const find = (req, res, next) => {
+  Request_.find({owner: req.user.id, service: req.params.id})
+  .then(handle404)
+  .then(
+    requests => {
+      const filteringRequests = requests.map(request => {
+        return {date: request.date.toDateString(), description: request.description, status: request.status, id: request._id}
+      })
+      res.status(200).json({requests: filteringRequests})
+    }
+  )
+  .catch(next)
+}
+
+module.exports = {create, enter, update, destroy, index, indexing, show, showing, findAll, find}

@@ -13,7 +13,9 @@ import Categories from './customer/components/Categories'
 import Services from './customer/components/Services'
 import Request from './customer/components/Request'
 import Alert from 'react-bootstrap/Alert'
-
+import Dashboard from './Dashboard'
+import Requests from './requests/components/Requests'
+import Request_ from './requests/components/Request' 
 
 class App extends Component {
   constructor () {
@@ -58,6 +60,9 @@ class App extends Component {
           <AuthenticatedRoute user={user} path='/change-password' render={() => (
             <ChangePassword alert={this.alert} user={user} />
           )} />
+          <AuthenticatedRoute user={user} exact  path='/dashboard' render={() => (
+            <Dashboard  user={user} />
+          )} />
           <AuthenticatedRoute user={user} exact  path='/users' render={() => (
             <Users  user={user} />
             
@@ -70,6 +75,15 @@ class App extends Component {
           )} />
           <AuthenticatedRoute user={user} exact  path='/users/:uid/categories/:cid/services/:sid' render={() => (
             <Request  user={user} />
+            
+          )} />
+          <AuthenticatedRoute user={user} exact path='/requests' render={() => (
+            <Requests  user={user} />
+            
+          )} />
+          <AuthenticatedRoute user={user} exact path='/requests/:id' render={() => (
+            <Request_  user={user} />
+            
           )} />
         </main>
       </React.Fragment>
